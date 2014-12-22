@@ -1,0 +1,10 @@
+require 'callapi/version'
+require 'memoist'
+require 'forwardable'
+require 'chainy'
+require 'ostruct'
+
+module Callapi
+  require 'callapi/config'
+  require 'callapi/call'
+end
