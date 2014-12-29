@@ -40,7 +40,8 @@ class Callapi::Call::Response
   end
 
   def no_content?
-    body.nil? || body.empty?
+    return true if body.nil?
+    body.strip.empty?
   end
   memoize :no_content?
 
