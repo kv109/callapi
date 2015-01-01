@@ -7,4 +7,5 @@ require 'ostruct'
 module Callapi
   require 'callapi/config'
   require 'callapi/call'
+  require 'callapi/routes'
 end

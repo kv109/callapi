@@ -1,0 +1,26 @@
+require 'active_support/core_ext/string'
+
+class Callapi::Routes
+  class << self
+    def draw(&block)
+      build_http_method_namespaces
+
+      instance_eval &block
+    end
+
+    def get(*args)
+      call_name = args.shift
+      camelized_call_name = call_name.camelize
+      full_class_name = camelized_call_name
+      full_class_name.split('::').inject(Get) do |k, class_name|
+        k.const_set(class_name, Class.new(Callapi::Call::Base))
+      end
+    end
+
+    def build_http_method_namespaces
+      Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys.each do |http_method|
+        Object.const_set(http_method.to_s.camelize, Module.new)
+      end
+    end
+  end
+end
