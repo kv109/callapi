@@ -13,7 +13,7 @@ describe Callapi::Routes do
 
     context 'should create new class' do
       it 'which inherits from Call::Base' do
-        expect( Get::Version.superclass ).to eql(Callapi::Call::Base)
+        expect( Callapi::Get::Version.superclass ).to eql(Callapi::Call::Base)
       end
     end
   end
@@ -33,8 +33,8 @@ describe Callapi::Routes do
     end
 
     it 'should create namespace' do
-      expect{ Get::Users::Posts }.to_not raise_error{ NameError }
-      expect( Get::Users::Posts.superclass ).to eql(Callapi::Call::Base)
+      expect{ Callapi::Get::Users::Posts }.to_not raise_error{ NameError }
+      expect( Callapi::Get::Users::Posts.superclass ).to eql(Callapi::Call::Base)
     end
   end
 end

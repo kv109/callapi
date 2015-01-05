@@ -12,7 +12,7 @@ class Callapi::Routes
       call_name = args.shift
       camelized_call_name = call_name.camelize
       camelized_call_name_with_namespaces = namespaces + [camelized_call_name]
-      camelized_call_name_with_namespaces.inject(Get) do |k, class_name|
+      camelized_call_name_with_namespaces.inject(Callapi::Get) do |k, class_name|
         k.const_set(class_name, Class.new(Callapi::Call::Base))
       end
     end
@@ -39,7 +39,7 @@ class Callapi::Routes
 
     def build_http_method_namespaces
       Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys.each do |http_method|
-        Object.const_set(http_method.to_s.camelize, Module.new)
+        Callapi.const_set(http_method.to_s.camelize, Module.new)
       end
     end
   end
