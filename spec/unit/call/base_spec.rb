@@ -12,6 +12,14 @@ describe Callapi::Call::Base do
     end
   end
 
+  context '.strategy' do
+    before { described_class.strategy = Callapi::Call::Request::Mock }
+
+    it 'should overwrite default strategy for each instance' do
+      expect(subject.strategy).to eql(Callapi::Call::Request::Mock)
+    end
+  end
+
   context '#response_class' do
     subject { call.response_class }
 

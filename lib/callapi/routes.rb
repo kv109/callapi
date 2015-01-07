@@ -9,11 +9,17 @@ class Callapi::Routes
     end
 
     def get(*args)
-      call_name = args.shift
-      camelized_call_name = call_name.camelize
-      camelized_call_name_with_namespaces = namespaces + [camelized_call_name]
-      camelized_call_name_with_namespaces.inject(Callapi::Get) do |k, class_name|
-        k.const_set(class_name, Class.new(Callapi::Call::Base))
+      call_name, options = args[0], args[1]
+      class_name_with_namespaces = namespaces + [call_name.camelize]
+
+      class_name_with_namespaces.inject(Callapi::Get) do |namespace, class_name|
+        if namespace.constants.include?(class_name.to_sym)
+          namespace.const_get(class_name)
+        else
+          namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
+            set_call_class_options(options, klass) if options
+          end
+        end
       end
     end
 
@@ -24,6 +30,10 @@ class Callapi::Routes
     end
 
     private
+
+    def set_call_class_options(options, klass)
+      klass.strategy = options[:strategy] if options[:strategy]
+    end
 
     def namespaces
       @namespaces ||= []
@@ -38,9 +48,13 @@ class Callapi::Routes
     end
 
     def build_http_method_namespaces
-      Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys.each do |http_method|
+      @build_http_method_namespaces ||= http_methods.each do |http_method|
         Callapi.const_set(http_method.to_s.camelize, Module.new)
       end
+    end
+
+    def http_methods
+      Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys
     end
   end
 end

@@ -18,7 +18,7 @@ class Callapi::Call::Base
   memoize :response
 
   def strategy
-    @strategy ||= Callapi::Config.default_request_strategy
+    @strategy ||= (self.class.strategy || Callapi::Config.default_request_strategy)
   end
 
   def request_metadata
@@ -28,6 +28,14 @@ class Callapi::Call::Base
 
   def response_class
     @response_class ||= Callapi::Config.default_response_class
+  end
+
+  def self.strategy=(strategy)
+    @strategy = strategy
+  end
+
+  def self.strategy
+    @strategy
   end
 
   private
