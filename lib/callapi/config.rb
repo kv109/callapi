@@ -1,13 +1,13 @@
 class Callapi::Config
   DEFAULT_REQUEST_STRATEGY = 'Callapi::Call::Request::Api'
-  DEFAULT_RESPONSE_CLASS   = 'Callapi::Call::Response::Json'
+  DEFAULT_RESPONSE_PARSER  = 'Callapi::Call::Response::Json'
   DEFAULT_MOCKS_DIRECTORY  = 'mocked_calls'
   DEFAULT_PATH_PREFIX = ''
 
   class << self
     attr_reader :mocks_directory
     attr_accessor :api_host
-    attr_writer :default_path_prefix, :default_response_class, :default_request_strategy
+    attr_writer :default_path_prefix, :default_response_parser, :default_request_strategy
 
     def configure
       yield self if block_given?
@@ -21,8 +21,8 @@ class Callapi::Config
       @default_path_prefix ||= DEFAULT_PATH_PREFIX
     end
 
-    def default_response_class
-      @default_response_class ||= DEFAULT_RESPONSE_CLASS.constantize
+    def default_response_parser
+      @default_response_parser ||= DEFAULT_RESPONSE_PARSER.constantize
     end
 
     def mocks_directory=(mocks_directory)

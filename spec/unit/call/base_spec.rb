@@ -20,10 +20,10 @@ describe Callapi::Call::Base do
     end
   end
 
-  context '#response_class' do
-    subject { call.response_class }
+  context '#response_parser' do
+    subject { call.response_parser }
 
-    before { call.with_response_class(Callapi::Call::Response::Json::AsObject) }
+    before { call.with_response_parser(Callapi::Call::Response::Json::AsObject) }
 
     it 'should be accessible' do
       expect(subject).to eql(Callapi::Call::Response::Json::AsObject)
