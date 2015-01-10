@@ -26,19 +26,21 @@ class Callapi::Config
     end
 
     def mocks_directory=(mocks_directory)
-      @mocks_directory = File.join(if defined?(Rails)
-                                         Rails.root.to_s + "/#{mocks_directory}"
-                                       else
-                                         mocks_directory
-                                       end, '').to_s
+      [].tap do |paths|
+        paths << Rails.root if defined?(Rails)
+        paths << mocks_directory
+        @mocks_directory = File.join(paths).to_s
+      end
     end
 
     def mocks_directory
-      @mocks_directory ||= File.join(if defined?(Rails)
-                             Rails.root.to_s + "/#{DEFAULT_MOCKS_DIRECTORY}"
-                           else
-                             DEFAULT_MOCKS_DIRECTORY
-                           end, '').to_s
+      return @mocks_directory if @mocks_directory
+
+      [].tap do |paths|
+        paths << Rails.root if defined?(Rails)
+        paths << DEFAULT_MOCKS_DIRECTORY
+        @mocks_directory = File.join(paths).to_s
+      end
     end
   end
 end

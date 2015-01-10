@@ -51,9 +51,8 @@ class Callapi::Call::Response
   end
 
   def error_messages
-    return [] if api_crashed?
     return [] if no_content?
 
-    to_struct.errors || []
+    to_struct.error_messages || []
   end
 end
