@@ -40,14 +40,31 @@ class Callapi::Routes
       call_name, options = args[0], args[1]
       class_name_with_namespaces = namespaces + [call_name.camelize]
 
+      create_call_class(http_method_namespace, class_name_with_namespaces, options)
+      create_helper_method(http_method_namespace, class_name_with_namespaces)
+    end
+
+    def create_call_class(http_method_namespace, class_name_with_namespaces, options)
       class_name_with_namespaces.inject(http_method_namespace) do |namespace, class_name|
         if namespace.constants.include?(class_name.to_sym)
-          namespace.const_get(class_name)
+          namespace.const_get(class_name).tap do |klass|
+            add_call_class(klass)
+          end
         else
           namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
             set_call_class_options(options, klass) if options
+            add_call_class(klass)
           end
         end
+      end
+    end
+
+    def create_helper_method(http_method_namespace, class_name_with_namespaces)
+      http_method = http_method_namespace.to_s.split('::').last
+      method_name = [http_method, class_name_with_namespaces, 'call'].join('_').underscore
+      call_class = call_classes.last
+      Object.send(:define_method, method_name) do
+        call_class
       end
     end
 
@@ -75,6 +92,14 @@ class Callapi::Routes
 
     def http_methods
       Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys
+    end
+
+    def call_classes
+      @call_classes ||= []
+    end
+
+    def add_call_class(call_class)
+      call_classes << call_class
     end
   end
 end
