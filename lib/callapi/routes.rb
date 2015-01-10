@@ -9,18 +9,23 @@ class Callapi::Routes
     end
 
     def get(*args)
-      call_name, options = args[0], args[1]
-      class_name_with_namespaces = namespaces + [call_name.camelize]
+      create_call_for_http_method(Callapi::Get, *args)
+    end
 
-      class_name_with_namespaces.inject(Callapi::Get) do |namespace, class_name|
-        if namespace.constants.include?(class_name.to_sym)
-          namespace.const_get(class_name)
-        else
-          namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
-            set_call_class_options(options, klass) if options
-          end
-        end
-      end
+    def post(*args)
+      create_call_for_http_method(Callapi::Post, *args)
+    end
+
+    def put(*args)
+      create_call_for_http_method(Callapi::Put, *args)
+    end
+
+    def delete(*args)
+      create_call_for_http_method(Callapi::Delete, *args)
+    end
+
+    def patch(*args)
+      create_call_for_http_method(Callapi::Patch, *args)
     end
 
     def namespace(*args)
@@ -30,6 +35,21 @@ class Callapi::Routes
     end
 
     private
+
+    def create_call_for_http_method(http_method_namespace, *args)
+      call_name, options = args[0], args[1]
+      class_name_with_namespaces = namespaces + [call_name.camelize]
+
+      class_name_with_namespaces.inject(http_method_namespace) do |namespace, class_name|
+        if namespace.constants.include?(class_name.to_sym)
+          namespace.const_get(class_name)
+        else
+          namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
+            set_call_class_options(options, klass) if options
+          end
+        end
+      end
+    end
 
     def set_call_class_options(options, klass)
       klass.strategy = options[:strategy] if options[:strategy]

@@ -8,7 +8,11 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   include Callapi::Call::Request::Http::LogHelper
 
   HTTP_METHOD_TO_REQUEST_CLASS = {
-    get: Net::HTTP::Get
+    get:     Net::HTTP::Get,
+    post:    Net::HTTP::Post,
+    put:     Net::HTTP::Put,
+    delete:  Net::HTTP::Delete,
+    patch:   Net::HTTP::Patch
   }
 
   def response
