@@ -17,7 +17,11 @@ class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
   memoize :to_hash
 
   def hash_to_struct
-    DeepStruct.new(data_to_parse)
+    if data_to_parse.is_a?(Array)
+      data_to_parse.map { |item| DeepStruct.new(item) }
+    else
+      DeepStruct.new(data_to_parse)
+    end
   end
 
   def data_to_parse
@@ -36,6 +40,7 @@ class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
   memoize :data_excluded_from_parsing
 
   def append_data_excluded_from_parsing(struct)
+    return if struct.is_a?(Array)
     struct.tap do |struct|
       keys_excluded_from_parsing.each do |key|
         struct.send("#{key}=", data_excluded_from_parsing[key])
