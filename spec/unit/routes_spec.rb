@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Callapi::Routes do
+  after do
+    described_class.send(:clear)
+  end
+
   context '#get' do
 
     before do
