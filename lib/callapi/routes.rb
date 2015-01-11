@@ -37,39 +37,39 @@ class Callapi::Routes
     private
 
     def create_call_for_http_method(http_method_namespace, *args)
-      call_name, options = args[0], args[1]
-      class_name_with_namespaces = namespaces + [call_name.camelize]
+      @http_method_namespace = http_method_namespace
+      @call_name, @call_options = args[0].camelize, args[1]
+      @call_name_with_namespaces = namespaces.dup.push(@call_name)
 
-      create_call_class(http_method_namespace, class_name_with_namespaces, options)
-      create_helper_method(http_method_namespace, class_name_with_namespaces)
+      create_call_class
+      create_helper_method
     end
 
-    def create_call_class(http_method_namespace, class_name_with_namespaces, options)
-      class_name_with_namespaces.inject(http_method_namespace) do |namespace, class_name|
+    def create_call_class
+      @call_name_with_namespaces.inject(@http_method_namespace) do |namespace, class_name|
         if namespace.constants.include?(class_name.to_sym)
-          namespace.const_get(class_name).tap do |klass|
-            add_call_class(klass)
-          end
+          namespace.const_get(class_name)
         else
           namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
-            set_call_class_options(options, klass) if options
-            add_call_class(klass)
+            @call_class = klass
+            set_call_class_options if @call_options
+            save_call_class
           end
         end
       end
     end
 
-    def create_helper_method(http_method_namespace, class_name_with_namespaces)
-      http_method = http_method_namespace.to_s.split('::').last
-      method_name = [http_method, class_name_with_namespaces, 'call'].join('_').underscore
-      call_class = call_classes.last
+    def create_helper_method
+      http_method = @http_method_namespace.to_s.split('::').last
+      method_name = [http_method, @call_name_with_namespaces, 'call'].join('_').underscore
+      call_class = @call_class
       Object.send(:define_method, method_name) do
         call_class
       end
     end
 
-    def set_call_class_options(options, klass)
-      klass.strategy = options[:strategy] if options[:strategy]
+    def set_call_class_options
+      @call_class.strategy = @call_options[:strategy] if @call_options[:strategy]
     end
 
     def namespaces
@@ -98,8 +98,8 @@ class Callapi::Routes
       @call_classes ||= []
     end
 
-    def add_call_class(call_class)
-      call_classes << call_class
+    def save_call_class
+      call_classes << @call_class
     end
   end
 end
