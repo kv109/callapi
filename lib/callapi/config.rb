@@ -29,7 +29,8 @@ class Callapi::Config
       [].tap do |paths|
         paths << Rails.root if defined?(Rails)
         paths << mocks_directory
-        @mocks_directory = File.join(paths).to_s
+        paths << '/'
+        @mocks_directory = File.join(paths)
       end
     end
 
@@ -39,7 +40,8 @@ class Callapi::Config
       [].tap do |paths|
         paths << Rails.root if defined?(Rails)
         paths << DEFAULT_MOCKS_DIRECTORY
-        @mocks_directory = File.join(paths).to_s
+        paths << '/'
+        @mocks_directory = File.join(paths)
       end
     end
   end
