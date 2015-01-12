@@ -12,6 +12,10 @@ class Callapi::Call::Base
   chain_attr_accessor :params, :headers, hash: true, prefix: 'add'
   chain_attr_accessor :response_parser, :strategy
 
+  def initialize(params = {})
+    add_params(params)
+  end
+
   def response
     build_response
   end

@@ -70,8 +70,8 @@ class Callapi::Routes
     def create_helper_method(klass, class_metadata)
       http_method = class_metadata.http_method_namespace.to_s.split('::').last
       method_name = [http_method, class_metadata.call_name_with_namespaces, 'call'].join('_').underscore
-      Object.send(:define_method, method_name) do
-        klass
+      Object.send(:define_method, method_name) do |*args|
+        klass.new(*args)
       end
     end
 

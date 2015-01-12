@@ -25,8 +25,11 @@ describe Callapi::Routes do
       end
     end
 
-    it 'should create helper method which returns created class' do
-      expect( get_version_call ).to eql(Callapi::Get::Version)
+    context 'helper_method' do
+      it 'should return instance of created class' do
+        expect( get_version_call ).to be_instance_of(Callapi::Get::Version)
+        expect( get_version_call(some_param: :some_value).params ).to eql(some_param: :some_value)
+      end
     end
 
   end
@@ -77,7 +80,7 @@ describe Callapi::Routes do
     end
 
     it 'should create helper method which name includes namespace' do
-      expect( get_users_posts_index_call ).to eql(Callapi::Get::Users::Posts::Index)
+      expect( get_users_posts_index_call ).to be_instance_of(Callapi::Get::Users::Posts::Index)
     end
   end
 end

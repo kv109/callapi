@@ -4,6 +4,12 @@ describe Callapi::Call::Base do
   let(:config) { Callapi::Config }
   let(:call) { described_class.new }
 
+  context '#initialize' do
+    it 'should take params as an argument' do
+      expect(described_class.new(some_param: :some_value).params).to eql(some_param: :some_value)
+    end
+  end
+
   context '#strategy' do
     before { allow(config).to receive(:request_strategy).and_return(Callapi::Call::Request::Api) }
 
