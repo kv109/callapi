@@ -1,17 +1,23 @@
 require 'spec_helper'
 
 describe Callapi::Routes do
-  after do
-    described_class.send(:clear)
+  before(:all) do
+    described_class.draw do
+      get 'version'
+      post 'version'
+      put 'version'
+      delete 'version'
+      patch 'version'
+      get 'users', strategy: Callapi::Call::Request::Mock
+      namespace :users do
+        namespace :posts do
+          get 'index'
+        end
+      end
+    end
   end
 
   context '#get' do
-
-    before do
-      described_class.draw do
-        get 'version'
-      end
-    end
 
     context 'should create new class with Callapi::Get namespace' do
       it 'which inherits from Call::Base' do
@@ -27,13 +33,6 @@ describe Callapi::Routes do
 
   context '#post' do
     context 'should create new class with Callapi::Post namespace' do
-
-      before do
-        described_class.draw do
-          post 'version'
-        end
-      end
-
       it 'which inherits from Call::Base' do
         expect( Callapi::Post::Version.superclass ).to eql(Callapi::Call::Base)
       end
@@ -42,13 +41,6 @@ describe Callapi::Routes do
 
   context '#put' do
     context 'should create new class with Callapi::Put namespace' do
-
-      before do
-        described_class.draw do
-          put 'version'
-        end
-      end
-
       it 'which inherits from Call::Base' do
         expect( Callapi::Put::Version.superclass ).to eql(Callapi::Call::Base)
       end
@@ -57,13 +49,6 @@ describe Callapi::Routes do
 
   context '#delete' do
     context 'should create new class with Callapi::Delete namespace' do
-
-      before do
-        described_class.draw do
-          delete 'version'
-        end
-      end
-
       it 'which inherits from Call::Base' do
         expect( Callapi::Delete::Version.superclass ).to eql(Callapi::Call::Base)
       end
@@ -72,13 +57,6 @@ describe Callapi::Routes do
 
   context '#patch' do
     context 'should create new class with Callapi::Patch namespace' do
-
-      before do
-        described_class.draw do
-          patch 'version'
-        end
-      end
-
       it 'which inherits from Call::Base' do
         expect( Callapi::Patch::Version.superclass ).to eql(Callapi::Call::Base)
       end
@@ -87,13 +65,6 @@ describe Callapi::Routes do
 
   context 'options' do
     context ':strategy' do
-
-      before do
-        described_class.draw do
-          get 'users', strategy: Callapi::Call::Request::Mock
-        end
-      end
-
       it 'should set request strategy for created call' do
         expect( Callapi::Get::Users.strategy ).to eql(Callapi::Call::Request::Mock)
       end
@@ -101,16 +72,6 @@ describe Callapi::Routes do
   end
 
   context '#namespace' do
-    before do
-      described_class.draw do
-        namespace :users do
-          namespace :posts do
-            get 'index'
-          end
-        end
-      end
-    end
-
     it 'should surround created call with namespace' do
       expect( Callapi::Get::Users::Posts::Index.superclass ).to eql(Callapi::Call::Base)
     end

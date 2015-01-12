@@ -9,8 +9,7 @@ class Callapi::Routes
 
       instance_eval &block
 
-      create_namespace_classes
-      create_call_classes
+      create_classes
     end
 
     def get(*args)
@@ -45,31 +44,26 @@ class Callapi::Routes
       Callapi::Routes::Metadata.new(http_method_namespace, *args)
     end
 
-    def create_namespace_classes
-      namespace_classes.each(&method(:create_namespace_class))
-    end
+    def create_classes
+      classes_metadata.each do |class_metadata|
+        classes = class_metadata.class_name.split('::')
+        classes = classes[2..classes.size]
 
-    def create_call_classes
-      call_classes.each(&method(:create_call_class))
-    end
-
-    def create_namespace_class(class_metadata)
-      classes = class_metadata.class_name.split('::')
-      classes = classes[2..classes.size]
-
-      classes.inject(class_metadata.http_method_namespace) do |namespace, class_name|
-        namespace.const_set(class_name, Class.new)
-      end
-    end
-
-    def create_call_class(class_metadata)
-      classes = class_metadata.class_name.split('::')
-      class_name = classes.pop
-      namespace = classes.join('::').constantize
-
-      namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
-        set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
-        create_helper_method(klass, class_metadata)
+        classes.inject(class_metadata.http_method_namespace) do |namespace, class_name|
+          if namespace.constants.include?(class_name.to_sym)
+            namespace.const_get(class_name)
+          else
+            full_class_name = "#{namespace}::#{class_name}"
+            if call_classes_names.include?(full_class_name)
+              namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
+                set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
+                create_helper_method(klass, class_metadata)
+              end
+            else
+              namespace.const_set(class_name, Class.new)
+            end
+          end
+        end
       end
     end
 
@@ -107,24 +101,20 @@ class Callapi::Routes
       Callapi::Call::Request::Http::HTTP_METHOD_TO_REQUEST_CLASS.keys
     end
 
-    def classes
-      @classes ||= []
+    def save_class(class_metadata)
+      classes_metadata << class_metadata unless classes_metadata.include?(class_metadata)
     end
 
-    def save_class(class_data)
-      classes << class_data unless classes.include?(class_data)
+    def classes_metadata
+      @classes_metadata ||= []
     end
 
-    def call_classes
-      classes.select(&:call_class)
+    def call_classes_metadata
+      @call_classes ||= classes_metadata.select(&:call_class)
     end
 
-    def namespace_classes
-      classes - call_classes
-    end
-
-    def clear
-      @classes = []
+    def call_classes_names
+      @call_classes_names ||= call_classes_metadata.map(&:class_name).uniq
     end
   end
 end
