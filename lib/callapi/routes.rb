@@ -77,6 +77,7 @@ class Callapi::Routes
 
     def set_call_class_options(klass, options)
       klass.strategy = options[:strategy] if options[:strategy]
+      klass.response_parser = options[:parser] if options[:parser]
     end
 
     def namespaces

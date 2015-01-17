@@ -31,7 +31,7 @@ class Callapi::Call::Base
   memoize :request_metadata
 
   def response_parser
-    @response_parser ||= Callapi::Config.default_response_parser
+    @response_parser ||= (self.class.response_parser || Callapi::Config.default_response_parser)
   end
 
   def self.strategy=(strategy)
@@ -40,6 +40,14 @@ class Callapi::Call::Base
 
   def self.strategy
     @strategy
+  end
+
+  def self.response_parser=(response_parser)
+    @response_parser = response_parser
+  end
+
+  def self.response_parser
+    @response_parser
   end
 
   private

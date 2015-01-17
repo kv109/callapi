@@ -72,6 +72,12 @@ describe Callapi::Routes do
         expect( Callapi::Get::Users.strategy ).to eql(Callapi::Call::Request::Mock)
       end
     end
+
+    context ':parser' do
+      it 'should set response parser for created call' do
+        expect( Callapi::Get::Users.response_parser ).to eql(Callapi::Call::Response::Plain)
+      end
+    end
   end
 
   context '#namespace' do

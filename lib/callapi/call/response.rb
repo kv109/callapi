@@ -16,7 +16,7 @@ class Callapi::Call::Response
     raise_error unless ok?
     return nil if no_content?
 
-    to_struct
+    to_struct #TODO: change this method name
   end
 
   def status
