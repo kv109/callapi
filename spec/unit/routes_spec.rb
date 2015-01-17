@@ -8,7 +8,7 @@ describe Callapi::Routes do
       put 'version'
       delete 'version'
       patch 'version'
-      get 'users', strategy: Callapi::Call::Request::Mock
+      get 'users', strategy: Callapi::Call::Request::Mock, parser: Callapi::Call::Response::Plain
       namespace :users do
         namespace :posts do
           get 'index'

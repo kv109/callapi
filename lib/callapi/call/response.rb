@@ -1,5 +1,6 @@
 # Change it to Callapi::Call::Response::Base
 class Callapi::Call::Response
+  require_relative 'response/plain'
   require_relative 'response/json'
   require_relative 'response/json/as_object'
 

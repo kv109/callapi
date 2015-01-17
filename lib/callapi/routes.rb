@@ -104,6 +104,8 @@ class Callapi::Routes
 
     def save_class(class_metadata)
       classes_metadata << class_metadata unless classes_metadata.include?(class_metadata)
+      @call_classes = nil
+      @call_classes_names = nil
     end
 
     def classes_metadata
