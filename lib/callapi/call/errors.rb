@@ -28,4 +28,13 @@ class Callapi::Call::Errors < StandardError
       super "Expected \"#{file_path}\""
     end
   end
+
+  class MissingParam < Callapi::Call::Errors
+    def initialize(request_path, param_keys_to_replace, missing_keys)
+      param_keys_to_replace.each do |param_key|
+        request_path.sub!(param_key + '_param', ':' + param_key)
+      end
+      super "could not found: #{missing_keys.join(', ')} for \"#{request_path}\""
+    end
+  end
 end

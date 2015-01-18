@@ -12,10 +12,29 @@ class Callapi::Call::RequestMetadata < Struct.new(:context)
   end
 
   def request_path
-    absolutized_call_name
+    request_path = request_path_without_replaced_param_keys
+    param_keys_to_replace.each do |param_key|
+      param_value = context.params[param_key.to_sym] || raise(Callapi::Call::Errors::MissingParam.new(request_path, param_keys_to_replace, missing_keys))
+      request_path.sub!(param_key + '_param', param_value.to_s)
+    end
+    request_path
   end
+  memoize :request_path
 
   private
+
+  def param_keys_to_replace
+    request_path_without_replaced_param_keys.scan(/(\w+)_param/).map(&:first)
+  end
+
+  def request_path_without_replaced_param_keys
+    '/' + call_name.underscore
+  end
+  memoize :request_path_without_replaced_param_keys
+
+  def missing_keys
+    (param_keys_to_replace.map(&:to_sym) - context.params.keys).map { |key| ":#{key}" }
+  end
 
   def namespaces_after_http_method
     namespaces[namespaces.index(namespace_with_http_method) + 1 .. namespaces.size]
@@ -29,10 +48,6 @@ class Callapi::Call::RequestMetadata < Struct.new(:context)
 
   def call_name
     namespaces_after_http_method.join('::')
-  end
-
-  def absolutized_call_name
-    '/' << call_name.underscore
   end
 
   def namespaces
