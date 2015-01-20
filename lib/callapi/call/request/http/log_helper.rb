@@ -2,6 +2,8 @@ require 'colorize'
 
 module Callapi::Call::Request::Http::LogHelper
   def with_logging
+    return yield if Callapi::Config.log_level == :off
+
     string = ''
     string << uri.host
     string << ":#{uri.port}" if uri.port

@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'memoist'
 gem 'activesupport'
 gem 'addressable'
+gem 'addressabler', '>= 0.1'
 gem 'colorize'
 gem 'chainy', '~> 0.0.5'
 

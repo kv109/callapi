@@ -1,5 +1,6 @@
 require 'net/http'
 require 'addressable/uri'
+require 'addressabler'
 
 class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   require_relative 'http/log_helper'
@@ -42,7 +43,7 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   def uri
     Addressable::URI.parse(host).tap do |uri|
       uri.path = path_prefix + request_path
-      uri.query_values = params
+      uri.query_hash = params
     end
   end
   memoize :uri

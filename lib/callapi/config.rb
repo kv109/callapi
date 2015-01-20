@@ -44,5 +44,13 @@ class Callapi::Config
         @mocks_directory = File.join(paths)
       end
     end
+
+    def log_level=(log_level)
+      @log_level = log_level
+    end
+
+    def log_level
+      @log_level ||= :debug
+    end
   end
 end
