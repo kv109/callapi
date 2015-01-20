@@ -3,8 +3,7 @@ class Callapi::Routes::Metadata
 
   def initialize(http_method_namespace, *args)
     @http_method_namespace = http_method_namespace
-    @call_name = args.shift.camelize
-    @call_options = args.shift
+    @call_name, @call_options = args.shift, *args
 
     call_name_with_all_namespaces.size.times do |i|
       metadata = create_metadata(i)
@@ -37,7 +36,13 @@ class Callapi::Routes::Metadata
   end
 
   def call_name_with_namespaces
-    namespaces.push(@call_name)
+    namespaces.push(@call_name).map do |class_name|
+      if class_name_with_param_key?(class_name)
+        class_name_to_class_name_with_param_key(class_name)
+      else
+        class_name
+      end.camelize
+    end
   end
   memoize :call_name_with_namespaces
 
@@ -50,4 +55,18 @@ class Callapi::Routes::Metadata
     Callapi::Routes.send(:namespaces).dup
   end
   memoize :namespaces
+
+  def class_name_with_param_key?(class_name)
+    class_name[0] == ':' || class_name.match('/:')
+  end
+
+  def class_name_to_class_name_with_param_key(class_name)
+    class_name.scan(/(:\w+)\/?/).map(&:first).each do |pattern|
+      replacement = pattern.dup
+      replacement[0] = ''
+      replacement << '_param'
+      class_name.sub!(pattern, replacement)
+    end
+    class_name
+  end
 end

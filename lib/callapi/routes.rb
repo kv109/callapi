@@ -69,7 +69,15 @@ class Callapi::Routes
 
     def create_helper_method(klass, class_metadata)
       http_method = class_metadata.http_method_namespace.to_s.split('::').last
-      method_name = [http_method, class_metadata.call_name_with_namespaces, 'call'].join('_').underscore
+      call_name_with_namespaces = class_metadata.call_name_with_namespaces.map do |class_name|
+        class_name.scan(/(::)?((\w)+)Param/).map { |matched_groups| matched_groups[1] }.compact.each do |pattern|
+          class_name.sub!(pattern, "By#{pattern}")
+          class_name.sub!('Param', '')
+        end
+        class_name
+      end
+      method_name = [http_method, call_name_with_namespaces, 'call'].join('_')
+      method_name = method_name.underscore.gsub('/', '_')
       Object.send(:define_method, method_name) do |*args|
         klass.new(*args)
       end
@@ -85,7 +93,7 @@ class Callapi::Routes
     end
 
     def add_namespace(namespace)
-      namespaces << namespace.to_s.camelize
+      namespaces << namespace.to_s
     end
 
     def remove_namespace
