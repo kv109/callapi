@@ -33,7 +33,9 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   end
 
   def request
-    request_class.new(uri.request_uri, headers)
+    request_class.new(uri.request_uri, headers).tap do |request|
+      request.set_form_data params if put_params_in_request_body?
+    end
   end
 
   def request_class
@@ -43,10 +45,14 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   def uri
     Addressable::URI.parse(host).tap do |uri|
       uri.path = path_prefix + request_path
-      uri.query_hash = params
+      uri.query_hash = params unless put_params_in_request_body?
     end
   end
   memoize :uri
+
+  def put_params_in_request_body?
+    [:post, :patch, :put].include? request_method
+  end
 
   def path_prefix
     ''

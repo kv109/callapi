@@ -20,7 +20,6 @@ class Callapi::Call::Request::Mock < Callapi::Call::Request::Base
   private
 
   def file_path
-
     File.join(Callapi::Config.mocks_directory, @context.request_method.to_s, file_name + MOCK_FORMAT)
   end
 
