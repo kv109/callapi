@@ -4,12 +4,32 @@ class Callapi::Call::Errors < StandardError
   }
 
   def self.error_by_status(status)
-    error_class_name = STATUS_TO_ERROR_CLASS[status] || 'ApiCrashed'
+    error_class_name = STATUS_TO_ERROR_CLASS[status]
+    unless error_class_name
+      error_class_name = case status
+        when 500..599 then 'ServerError'
+        when 400..499 then 'ClientError'
+        when 300..399 then 'RedirectionError'
+        else
+          'ServerError'
+      end
+    end
     "Callapi::Call::Errors::#{error_class_name}".constantize
   end
 
-  class ApiCrashed < Callapi::Call::Errors; end
-  class NotAuthorized < Callapi::Call::Errors; end
+  class ApiError < Callapi::Call::Errors
+    def initialize(status, message)
+      super "#{status}: #{message}"
+    end
+  end
+
+  class ServerError < ApiError; end
+
+  class ClientError < ApiError; end
+
+  class RedirectionError < ApiError; end
+
+  class NotAuthorized < ApiError; end
 
   class UnknownHttpMethod < Callapi::Call::Errors
     def initialize

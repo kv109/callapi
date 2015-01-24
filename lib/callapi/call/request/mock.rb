@@ -12,7 +12,7 @@ class Callapi::Call::Request::Mock < Callapi::Call::Request::Base
   end
 
   def body
-    File.read(file_path)
+    File.read(file_path)  # add #with_logging
   rescue Errno::ENOENT
     raise Callapi::Call::Errors::CouldNotFoundRequestMockFile.new(file_path)
   end

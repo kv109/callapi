@@ -17,7 +17,7 @@ class Callapi::Call::Response
     raise_error unless ok?
     return nil if no_content?
 
-    to_struct #TODO: change this method name
+    to_struct #TODO: change this method name (#parsed_data ?)
   end
 
   def status
@@ -32,13 +32,9 @@ class Callapi::Call::Response
   end
 
   def ok?
-    status < 400
+    status < 300
   end
   memoize :ok?
-
-  def api_crashed?
-    status >= 500
-  end
 
   def no_content?
     return true if body.nil?
@@ -48,12 +44,10 @@ class Callapi::Call::Response
 
   def raise_error
     error_class = Callapi::Call::Errors.error_by_status(status)
-    raise error_class.new(error_messages.join(', '))
+    raise error_class.new(status, error_message)
   end
 
-  def error_messages
-    return [] if no_content?
-
-    to_struct.error_messages || []
+  def error_message
+    "response body: \"#{body}\""
   end
 end

@@ -11,11 +11,6 @@ class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
 
   private
 
-  def to_hash
-    JSON.parse(body)
-  end
-  memoize :to_hash
-
   def hash_to_struct
     if data_to_parse.is_a?(Array)
       data_to_parse.map { |item| DeepStruct.new(item) }
