@@ -19,6 +19,7 @@ class Callapi::Call::Response
 
     to_struct #TODO: change this method name (#parsed_data ?)
   end
+  memoize :data
 
   def status
     code.to_i
