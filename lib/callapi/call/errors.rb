@@ -1,6 +1,7 @@
 class Callapi::Call::Errors < StandardError
   STATUS_TO_ERROR_CLASS = {
-    401 => 'NotAuthorized'
+    401 => 'NotAuthorized',
+    404 => 'NotFound'
   }
 
   def self.error_by_status(status)
@@ -24,12 +25,10 @@ class Callapi::Call::Errors < StandardError
   end
 
   class ServerError < ApiError; end
-
   class ClientError < ApiError; end
-
   class RedirectionError < ApiError; end
-
   class NotAuthorized < ApiError; end
+  class NotFound < ApiError; end
 
   class UnknownHttpMethod < Callapi::Call::Errors
     def initialize

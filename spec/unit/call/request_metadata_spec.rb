@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Callapi::Call::RequestMetadata do
   before(:all) do
-    Get::Users = Class.new(Callapi::Call::Base)
     Get::Users::Details = Class.new(Callapi::Call::Base)
     Get::Users::IdParam = Class.new(Callapi::Call::Base)
     Get::Users::IdParam::Posts = Class.new(Callapi::Call::Base)

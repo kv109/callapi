@@ -12,13 +12,23 @@ describe Callapi::Call::Response do
 
     subject { @call.response.data }
 
-    context 'when API returned 500' do
+    context 'when API returned 5xx' do
       before do
         stub_request(:get, 'http://api.org/users').to_return(status: 500)
       end
 
-      it 'should raise ApiCrashed error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::ApiCrashed }
+      it 'should raise ServerError error' do
+        expect{ subject }.to raise_error { Callapi::Call::Errors::ServerError }
+      end
+    end
+
+    context 'when API returned 4xx' do
+      before do
+        stub_request(:get, 'http://api.org/users').to_return(status: 400)
+      end
+
+      it 'should raise ClientError error' do
+        expect{ subject }.to raise_error { Callapi::Call::Errors::ClientError }
       end
     end
 
