@@ -17,9 +17,8 @@ class Callapi::Call::Base
   end
 
   def response
-    build_response
+    @response ||= build_response
   end
-  memoize :response
 
   def strategy
     @strategy ||= (self.class.strategy || Callapi::Config.default_request_strategy)
@@ -48,6 +47,10 @@ class Callapi::Call::Base
 
   def self.response_parser
     @response_parser
+  end
+
+  def reload
+    @response = nil
   end
 
   private
