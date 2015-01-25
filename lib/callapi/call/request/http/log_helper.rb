@@ -26,7 +26,7 @@ module Callapi::Call::Request::Http::LogHelper
     response = yield
 
     response.tap do |response|
-      "RESPONSE:\n".tap do |string|
+      "RESPONSE: [#{response.code}]\n".tap do |string|
         string << (response.body.nil? ? '[EMPTY BODY]' : response.body)
         puts string.colorize(:light_blue)
       end
@@ -34,7 +34,6 @@ module Callapi::Call::Request::Http::LogHelper
       puts 'request send'.center(80, '-').colorize(:white).on_blue
     end
   rescue StandardError => e
-    puts "Displaying logs skipped:".center(80, '-').colorize(:red).on_yellow
-    puts "#{e.class}: #{e.to_s}".center(80, '-').colorize(:red).on_yellow
+    puts "Exception occured, skipping logs:".center(80, '-').colorize(:red).on_yellow
   end
 end
