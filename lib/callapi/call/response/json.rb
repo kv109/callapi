@@ -1,9 +1,6 @@
-#TODO: replace with MultiJSON
-require 'json'
+require 'multi_json'
 
 class Callapi::Call::Response::Json < Callapi::Call::Response
-  extend Memoist
-
   def parse
     to_hash
   end
@@ -11,9 +8,9 @@ class Callapi::Call::Response::Json < Callapi::Call::Response
   private
 
   def to_hash
-    JSON.parse(body)
+    @to_hash ||= MultiJson.load(body)
   end
-  memoize :to_hash
+  #TODO: remove Memoist
 
   def error_message
     to_hash['error_message'] rescue super
