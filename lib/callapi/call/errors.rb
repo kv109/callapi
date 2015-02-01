@@ -1,3 +1,4 @@
+#TODO: Errors class names should be like Callapi::ServerError, not Callapi::Call::Errors::ServerError
 class Callapi::Call::Errors < StandardError
   STATUS_TO_ERROR_CLASS = {
     401 => 'NotAuthorized',
