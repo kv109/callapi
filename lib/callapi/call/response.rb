@@ -17,7 +17,7 @@ class Callapi::Call::Response
     raise_error unless ok?
     return nil if no_content?
 
-    to_struct #TODO: change this method name (#parsed_data ?)
+    parse
   end
   memoize :data
 
@@ -28,7 +28,7 @@ class Callapi::Call::Response
 
   private
 
-  def to_struct
+  def parse
     raise NotImplementedError
   end
 

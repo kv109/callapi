@@ -4,7 +4,7 @@ require 'json'
 class Callapi::Call::Response::Json < Callapi::Call::Response
   extend Memoist
 
-  def to_struct
+  def parse
     to_hash
   end
 

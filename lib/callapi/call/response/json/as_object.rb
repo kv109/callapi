@@ -3,7 +3,7 @@ require_relative '../../../../ext/deep_struct'
 class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
   extend Memoist
 
-  def to_struct
+  def parse
     hash_to_struct.tap do |struct|
       append_data_excluded_from_parsing(struct)
     end
