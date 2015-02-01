@@ -1,17 +1,23 @@
 require_relative '../../../../ext/deep_struct'
 
 class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
-  extend Memoist
-
   def parse
-    hash_to_struct.tap do |struct|
+    object.tap do |struct|
       append_data_excluded_from_parsing(struct)
     end
   end
 
+  def self.keys_excluded_from_parsing
+    @keys_excluded_from_parsing ||= []
+  end
+
+  def self.keys_excluded_from_parsing=(keys_excluded_from_parsing)
+    @keys_excluded_from_parsing = keys_excluded_from_parsing
+  end
+
   private
 
-  def hash_to_struct
+  def object
     if data_to_parse.is_a?(Array)
       data_to_parse.map { |item| DeepStruct.new(item) }
     else
@@ -20,31 +26,24 @@ class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
   end
 
   def data_to_parse
-    to_hash.dup.tap do |hash|
-      keys_excluded_from_parsing.each { |key| hash.delete(key) }
-    end
+    keys_excluded_from_parsing = self.class.keys_excluded_from_parsing
+    to_hash.dup.delete_if { |key, value| keys_excluded_from_parsing.include? key }
   end
 
   def data_excluded_from_parsing
-    {}.tap do |hash|
-      keys_excluded_from_parsing.each do |key|
+    @data_excluded_from_parsing ||= {}.tap do |hash|
+      self.class.keys_excluded_from_parsing.each do |key|
         hash[key] = to_hash[key]
       end
     end
   end
-  memoize :data_excluded_from_parsing
 
   def append_data_excluded_from_parsing(struct)
     return if struct.is_a?(Array)
     struct.tap do |struct|
-      keys_excluded_from_parsing.each do |key|
+      self.class.keys_excluded_from_parsing.each do |key|
         struct.send("#{key}=", data_excluded_from_parsing[key])
       end
     end
-  end
-
-  #TODO: should be configurable
-  def keys_excluded_from_parsing
-    %w(translations)
   end
 end
