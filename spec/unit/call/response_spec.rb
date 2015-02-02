@@ -33,7 +33,7 @@ describe Callapi::Call::Parser do
       end
 
       it 'should raise ServerError error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::ServerError }
+        expect{ subject }.to raise_error { Callapi::ServerError }
       end
     end
 
@@ -43,7 +43,7 @@ describe Callapi::Call::Parser do
       end
 
       it 'should raise ClientError error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::ClientError }
+        expect{ subject }.to raise_error { Callapi::ClientError }
       end
     end
 
@@ -53,7 +53,7 @@ describe Callapi::Call::Parser do
       end
 
       it 'should raise NotAuthorized error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::NotAuthorized }
+        expect{ subject }.to raise_error { Callapi::NotAuthorizedError }
       end
     end
 

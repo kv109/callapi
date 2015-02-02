@@ -44,7 +44,7 @@ class Callapi::Call::Parser
   memoize :no_content?
 
   def raise_error
-    error_class = Callapi::Call::Errors.error_by_status(status)
+    error_class = Callapi::Errors.error_by_status(status)
     raise error_class.new(status, error_message)
   end
 

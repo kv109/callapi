@@ -2,7 +2,7 @@ require 'colorize'
 
 module Callapi::Call::Request::Http::LogHelper
   def with_logging
-    return yield if Callapi::Config.log_level == :off
+    return yield if Callapi::Config.log_level == :none
 
     string = ''
     string << uri.host

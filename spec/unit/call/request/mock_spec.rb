@@ -11,7 +11,7 @@ describe Callapi::Call::Request::Mock do
 
     context 'when there is no file with mocked response' do
       it 'should raise CouldNotFoundRequestMockFile error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::CouldNotFoundRequestMockFile }
+        expect{ subject }.to raise_error { Callapi::CouldNotFoundMockRequestFileError }
       end
     end
 

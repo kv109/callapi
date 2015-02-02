@@ -39,7 +39,7 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   end
 
   def request_class
-    HTTP_METHOD_TO_REQUEST_CLASS[request_method] || raise(Callapi::Call::Errors::UnknownHttpMethod)
+    HTTP_METHOD_TO_REQUEST_CLASS[request_method] || raise(Callapi::UnknownHttpMethodError)
   end
 
   def uri

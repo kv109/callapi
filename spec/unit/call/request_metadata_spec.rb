@@ -26,7 +26,7 @@ describe Callapi::Call::RequestMetadata do
       let(:metadata) { described_class.new(ClassWithoutHttpNamespace.new) }
 
       it 'should raise UnknownHttpMethod error' do
-        expect{ subject }.to raise_error { Callapi::Call::Errors::UnknownHttpMethod }
+        expect{ subject }.to raise_error { Callapi::UnknownHttpMethodError }
       end
     end
   end
@@ -50,7 +50,7 @@ describe Callapi::Call::RequestMetadata do
         let(:metadata) { described_class.new(Get::Users::IdParam::Posts::PostIdParam.new(post_id: 456)) }
 
         it 'should raise MissingParam error' do
-          expect{ subject }.to raise_error{Callapi::Call::Errors::MissingParam}
+          expect{ subject }.to raise_error{Callapi::MissingParamError}
         end
       end
     end

@@ -1,6 +1,6 @@
 class Callapi::Call::Request::Api < Callapi::Call::Request::Http
   def host
-    Callapi::Config.api_host || raise(Callapi::Call::Errors::ApiHostNotSet)
+    Callapi::Config.api_host || raise(Callapi::ApiHostNotSetError)
   end
 
   def path_prefix

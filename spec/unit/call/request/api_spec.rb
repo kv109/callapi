@@ -7,7 +7,7 @@ describe Callapi::Call::Request::Api do
 
     context 'when API host is not set' do
       it 'should raise ApiHostNotSet error' do
-        expect { subject }.to raise_error { Callapi::Call::Errors::ApiHostNotSet }
+        expect { subject }.to raise_error { Callapi::ApiHostNotSetError }
       end
     end
 

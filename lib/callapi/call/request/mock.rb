@@ -14,7 +14,7 @@ class Callapi::Call::Request::Mock < Callapi::Call::Request::Base
   def body
     File.read(file_path)  # add #with_logging
   rescue Errno::ENOENT
-    raise Callapi::Call::Errors::CouldNotFoundRequestMockFile.new(file_path)
+    raise Callapi::CouldNotFoundMockRequestFileError.new(file_path)
   end
 
   private
