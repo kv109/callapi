@@ -1,6 +1,6 @@
 class Callapi::Config
   DEFAULT_REQUEST_STRATEGY = 'Callapi::Call::Request::Api'
-  DEFAULT_RESPONSE_PARSER  = 'Callapi::Call::Response::Json'
+  DEFAULT_RESPONSE_PARSER  = 'Callapi::Call::Parser::Json'
   DEFAULT_MOCKS_DIRECTORY  = 'mocked_calls'
   DEFAULT_PATH_PREFIX = ''
 

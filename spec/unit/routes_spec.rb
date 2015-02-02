@@ -9,7 +9,7 @@ describe Callapi::Routes do
       delete 'version'
       patch 'version'
 
-      get 'users', strategy: Callapi::Call::Request::Mock, parser: Callapi::Call::Response::Plain
+      get 'users', strategy: Callapi::Call::Request::Mock, parser: Callapi::Call::Parser::Plain
       get 'users/:id'
       namespace :users do
         get ':id/posts/:post_id'
@@ -78,9 +78,9 @@ describe Callapi::Routes do
       end
     end
 
-    context '#get "users", parser: Callapi::Call::Response::Plain' do
-      it 'should set Callapi::Get::Users.response_parser to Callapi::Call::Response::Plain' do
-        expect( Callapi::Get::Users.response_parser ).to eql(Callapi::Call::Response::Plain)
+    context '#get "users", parser: Callapi::Call::Parser::Plain' do
+      it 'should set Callapi::Get::Users.response_parser to Callapi::Call::Parser::Plain' do
+        expect( Callapi::Get::Users.response_parser ).to eql(Callapi::Call::Parser::Plain)
       end
     end
   end

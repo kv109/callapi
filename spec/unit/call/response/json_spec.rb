@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Callapi::Call::Response::Json do
+describe Callapi::Call::Parser::Json do
   context '#data' do
     before do
       config = Callapi::Config

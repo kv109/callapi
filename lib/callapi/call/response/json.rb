@@ -1,6 +1,6 @@
 require 'multi_json'
 
-class Callapi::Call::Response::Json < Callapi::Call::Response
+class Callapi::Call::Parser::Json < Callapi::Call::Parser
   def parse
     to_hash
   end

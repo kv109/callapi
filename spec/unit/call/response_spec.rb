@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Callapi::Call::Response do
+describe Callapi::Call::Parser do
   before do
     config = Callapi::Config
     allow(config).to receive(:api_host).and_return('http://api.org')
@@ -16,7 +16,7 @@ describe Callapi::Call::Response do
     it 'should not parse response twice unless call is reloaded' do
       cached_response = {'json' => true}
       expect(@call.response.data).to eql cached_response
-      @call.response_parser = Callapi::Call::Response::Plain
+      @call.response_parser = Callapi::Call::Parser::Plain
       expect(@call.response.data).to eql cached_response
       @call.reload
       expect(@call.response.data).to eql '{"json": true}'

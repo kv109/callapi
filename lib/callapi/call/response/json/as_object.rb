@@ -1,6 +1,6 @@
 require_relative '../../../../ext/deep_struct'
 
-class Callapi::Call::Response::Json::AsObject < Callapi::Call::Response::Json
+class Callapi::Call::Parser::Json::AsObject < Callapi::Call::Parser::Json
   def parse
     object.tap do |struct|
       append_data_excluded_from_parsing(struct)

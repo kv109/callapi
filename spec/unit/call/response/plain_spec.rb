@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Callapi::Call::Response::Plain do
+describe Callapi::Call::Parser::Plain do
   context '#data' do
     before do
       Callapi::Config.configure do |config|
@@ -8,7 +8,7 @@ describe Callapi::Call::Response::Plain do
       end
 
       Callapi::Routes.draw do
-        get 'plain', parser: Callapi::Call::Response::Plain
+        get 'plain', parser: Callapi::Call::Parser::Plain
       end
 
       stub_request(:get, 'http://api.org/plain').to_return(status: 200, body: 'some response')

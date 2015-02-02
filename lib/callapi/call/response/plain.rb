@@ -1,4 +1,4 @@
-class Callapi::Call::Response::Plain < Callapi::Call::Response
+class Callapi::Call::Parser::Plain < Callapi::Call::Parser
   def parse
     body
   end
