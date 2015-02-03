@@ -35,6 +35,7 @@ module Callapi::Call::Request::Http::LogHelper
       puts "request send (#{(Time.now - t0).round(3)} sec)".center(80, '-').colorize(:white).on_blue
     end
   rescue StandardError => e
-    puts "Exception occured, skipping logs:".center(80, '-').colorize(:red).on_yellow
+    puts "Exception occured, skipping logs".center(80, '-').colorize(:red).on_yellow
+    raise e
   end
 end
