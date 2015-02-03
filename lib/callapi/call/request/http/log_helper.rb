@@ -4,6 +4,7 @@ module Callapi::Call::Request::Http::LogHelper
   def with_logging
     return yield if Callapi::Config.log_level == :none
 
+    t0 = Time.now
     string = ''
     string << uri.host
     string << ":#{uri.port}" if uri.port
@@ -31,7 +32,7 @@ module Callapi::Call::Request::Http::LogHelper
         puts string.colorize(:light_blue)
       end
 
-      puts 'request send'.center(80, '-').colorize(:white).on_blue
+      puts "request send (#{(Time.now - t0).round(3)} sec)".center(80, '-').colorize(:white).on_blue
     end
   rescue StandardError => e
     puts "Exception occured, skipping logs:".center(80, '-').colorize(:red).on_yellow
