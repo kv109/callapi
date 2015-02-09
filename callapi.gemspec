@@ -28,4 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', '~> 4.2'
   spec.add_runtime_dependency 'chainy', '~> 0.0.5'
   spec.add_runtime_dependency 'memoist', '~> 0.11'
+
+  spec.required_ruby_version = '>= 2.0'
 end
