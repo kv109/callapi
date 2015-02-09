@@ -46,8 +46,7 @@ class Callapi::Routes
 
     def create_classes
       classes_metadata.each do |class_metadata|
-        classes = class_metadata.class_name.split('::')
-        classes = classes[2..classes.size]
+        classes = classes_without_http_namespace(class_metadata)
 
         classes.inject(class_metadata.http_method_namespace) do |namespace, class_name|
           if namespace.constants.include?(class_name.to_sym)
@@ -55,16 +54,29 @@ class Callapi::Routes
           else
             full_class_name = "#{namespace}::#{class_name}"
             if call_classes_names.include?(full_class_name)
-              namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
-                set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
-                create_helper_method(klass, class_metadata)
-              end
+              create_class(namespace, class_name, class_metadata)
             else
-              namespace.const_set(class_name, Class.new)
+              create_namespace(namespace, class_name)
             end
           end
         end
       end
+    end
+
+    def classes_without_http_namespace(class_metadata)
+      classes = class_metadata.class_name.split('::')
+      classes[2..classes.size]
+    end
+
+    def create_class(namespace, class_name, class_metadata)
+      namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
+        set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
+        create_helper_method(klass, class_metadata)
+      end
+    end
+
+    def create_namespace(namespace, new_namespace)
+      namespace.const_set(new_namespace, Class.new)
     end
 
     def create_helper_method(klass, class_metadata)
