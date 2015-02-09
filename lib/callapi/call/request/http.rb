@@ -44,7 +44,7 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
 
   def uri
     Addressable::URI.parse(host).tap do |uri|
-      uri.path = path_prefix + request_path
+      uri.path = api_path_prefix + request_path
       uri.query_hash = params unless put_params_in_request_body?
     end
   end
@@ -54,7 +54,7 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
     [:post, :patch, :put].include? request_method
   end
 
-  def path_prefix
+  def api_path_prefix
     ''
   end
 end
