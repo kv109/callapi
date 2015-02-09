@@ -7,7 +7,7 @@ class Callapi::Config
   class << self
     attr_reader :mocks_directory
     attr_accessor :api_host
-    attr_writer :default_path_prefix, :default_response_parser, :default_request_strategy
+    attr_writer :api_path_prefix, :default_response_parser, :default_request_strategy
 
     def configure
       yield self if block_given?
@@ -17,8 +17,8 @@ class Callapi::Config
       @default_request_strategy ||= DEFAULT_REQUEST_STRATEGY.constantize
     end
 
-    def default_path_prefix
-      @default_path_prefix ||= DEFAULT_PATH_PREFIX
+    def api_path_prefix
+      @api_path_prefix ||= DEFAULT_PATH_PREFIX
     end
 
     def default_response_parser
