@@ -6,17 +6,15 @@ module Callapi::Call::Request::Http::LogHelper
 
     start_time = Time.now
 
-    string = ''
-
     add_api_host_log
     add_request_path_log
     add_request_headers_log
     add_request_params_log
 
-    response = yield
-
-    add_response_log(response, start_time)
-
+    yield.tap do |response|
+      add_response_log(response)
+      add_response_summary_log(start_time)
+    end
   rescue StandardError => e
     puts 'Exception occured, skipping logs'.center(80, '-').colorize(:red).on_yellow
     raise e
@@ -52,14 +50,16 @@ module Callapi::Call::Request::Http::LogHelper
     end
   end
 
-  def add_response_log(response, start_time)
+  def add_response_log(response)
     response.tap do |response|
       "RESPONSE: [#{response.code}]\n".tap do |string|
         string << (response.body.nil? ? '[EMPTY BODY]' : response.body)
         puts string.colorize(:light_blue)
       end
-
-      puts "request send (#{(Time.now - start_time).round(3)} sec)".center(80, '-').colorize(:white).on_blue
     end
+  end
+
+  def add_response_summary_log(start_time)
+    puts "request send (#{(Time.now - start_time).round(3)} sec)".center(80, '-').colorize(:white).on_blue
   end
 end
