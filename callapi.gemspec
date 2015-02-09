@@ -6,12 +6,12 @@ require 'callapi/version'
 Gem::Specification.new do |spec|
   spec.name          = "callapi"
   spec.version       = Callapi::VERSION
-  spec.authors       = ["Kacper Walanus"]
-  spec.email         = ["kacper.walanus@elpassion.pl"]
-  spec.summary       = %q{Callapi}
-  spec.description   = %q{Callapi}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.authors       = ['Kacper Walanus']
+  spec.email         = ['kacper@walanus.com']
+  spec.summary       = %q{Easy API calls}
+  spec.description   = %q{Easy API calls}
+  spec.homepage      = 'https://github.com/kv109/Callapi'
+  spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
