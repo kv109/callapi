@@ -24,6 +24,7 @@ class Callapi::Routes::Metadata
       data.class_name = full_class_name(i)
       data.call_class = is_call_class
       data.http_method_namespace = @http_method_namespace
+      data.http_method = @http_method_namespace.to_s.split('::').last
       if is_call_class
         data.class_options = @call_options
         data.call_name_with_namespaces = call_name_with_namespaces

@@ -84,19 +84,24 @@ class Callapi::Routes
     end
 
     def create_helper_method(klass, class_metadata)
-      http_method = class_metadata.http_method_namespace.to_s.split('::').last
-      call_name_with_namespaces = class_metadata.call_name_with_namespaces.map do |class_name|
+      Object.send(:define_method, helper_method_name(class_metadata)) do |*args|
+        klass.new(*args)
+      end
+    end
+
+    def helper_method_base_name(class_metadata)
+      class_metadata.call_name_with_namespaces.map do |class_name|
         class_name.scan(/(::)?((\w)+)Param/).map { |matched_groups| matched_groups[1] }.compact.each do |pattern|
           class_name.sub!(pattern, "By#{pattern}")
           class_name.sub!('Param', '')
         end
         class_name
       end
-      method_name = [http_method, call_name_with_namespaces, 'call'].join('_')
-      method_name = method_name.underscore.gsub('/', '_')
-      Object.send(:define_method, method_name) do |*args|
-        klass.new(*args)
-      end
+    end
+
+    def helper_method_name(class_metadata)
+      method_name = [class_metadata.http_method, helper_method_base_name(class_metadata), 'call'].join('_')
+      method_name.underscore.gsub('/', '_')
     end
 
     def set_call_class_options(klass, options)
