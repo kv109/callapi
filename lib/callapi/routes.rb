@@ -52,12 +52,7 @@ class Callapi::Routes
           if namespace.constants.include?(class_name.to_sym)
             namespace.const_get(class_name)
           else
-            full_class_name = "#{namespace}::#{class_name}"
-            if call_classes_names.include?(full_class_name)
-              create_class(namespace, class_name, class_metadata)
-            else
-              create_namespace(namespace, class_name)
-            end
+            create_class(namespace, class_name, class_metadata)
           end
         end
       end
@@ -69,13 +64,22 @@ class Callapi::Routes
     end
 
     def create_class(namespace, class_name, class_metadata)
+      full_class_name = "#{namespace}::#{class_name}"
+      if call_classes_names.include?(full_class_name)
+        create_call_class(namespace, class_name, class_metadata)
+      else
+        create_call_namespace(namespace, class_name)
+      end
+    end
+
+    def create_call_class(namespace, class_name, class_metadata)
       namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
         set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
         create_helper_method(klass, class_metadata)
       end
     end
 
-    def create_namespace(namespace, new_namespace)
+    def create_call_namespace(namespace, new_namespace)
       namespace.const_set(new_namespace, Class.new)
     end
 
