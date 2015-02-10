@@ -29,6 +29,7 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   end
 
   def http
+    #TODO: Use HTTParty
     Net::HTTP.new(uri.host, uri.port)
   end
 
