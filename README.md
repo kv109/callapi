@@ -208,3 +208,4 @@ end
 
 <br>
 [![Gem Version](https://badge.fury.io/rb/callapi.svg)](http://badge.fury.io/rb/callapi)
+[![Code Climate](https://codeclimate.com/github/kv109/Callapi/badges/gpa.svg)](https://codeclimate.com/github/kv109/Callapi)
