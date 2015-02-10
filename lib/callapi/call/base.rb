@@ -5,7 +5,6 @@ class Callapi::Call::Base
   require_relative 'response'
 
   extend Forwardable
-  extend Memoist
 
   def_delegators :request_metadata, :request_method, :request_path
 
@@ -23,11 +22,6 @@ class Callapi::Call::Base
   def strategy
     @strategy ||= (self.class.strategy || Callapi::Config.default_request_strategy)
   end
-
-  def request_metadata
-    Callapi::Call::RequestMetadata.new(self)
-  end
-  memoize :request_metadata
 
   def response_parser
     @response_parser ||= (self.class.response_parser || Callapi::Config.default_response_parser)
@@ -62,5 +56,9 @@ class Callapi::Call::Base
   #TODO: Should be replaced with #strategy. There is no need for additional class between Base and actual strategy, for now Callapi::Call::Request is such unnecessary class.
   def request_class
     Callapi::Call::Request
+  end
+
+  def request_metadata
+    @request_metadata ||= Callapi::Call::RequestMetadata.new(self)
   end
 end
