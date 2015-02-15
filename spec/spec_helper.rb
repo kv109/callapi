@@ -8,7 +8,7 @@ RSpec.configure do |config|
     Get::Users = Class.new(Callapi::Call::Base)
 
     Callapi::Config.configure do |config|
-      config.log_level = :off
+      config.log_level = :none
     end
   end
 end
