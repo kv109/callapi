@@ -2,7 +2,7 @@ class Callapi::Config
   DEFAULT_REQUEST_STRATEGY = 'Callapi::Call::Request::Api'
   DEFAULT_RESPONSE_PARSER  = 'Callapi::Call::Parser::Json'
   DEFAULT_MOCKS_DIRECTORY  = 'mocked_calls'
-  DEFAULT_PATH_PREFIX = ''
+  DEFAULT_PATH_PREFIX = nil
 
   class << self
     attr_reader :mocks_directory
