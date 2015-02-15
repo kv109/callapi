@@ -29,7 +29,7 @@ Or install it yourself as:
 require 'callapi'
 
 Callapi::Config.configure do |config|
-  config.api_host = 'http://private-50e9-callapi.apiary-mock.com'
+  config.api_host = 'http://your.api.org/v2'
 end
 ```
   
@@ -174,17 +174,13 @@ call.with_response_parser(Callapi::Call::Parser::Plain).response.data           
 ##### Config options
 
 - `api_host`
-- `api_path_prefix`
 - `default_response_parser`
 - `log_level`
 
 ```ruby
 Callapi::Config.configure do |config|
-  config.api_host = 'http://your.api.org'
-  
-  # request will be send to http://your.api.org/api/
-  config.api_path_prefix = 'api'
-  
+  config.api_host = 'http://your.api.org/v2'
+
   # see Parsers section
   config.default_response_parser = Callapi::Call::Parser::Json::AsObject
   
