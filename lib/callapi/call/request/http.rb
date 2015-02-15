@@ -5,7 +5,6 @@ require 'addressabler'
 class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   require_relative 'http/log_helper'
 
-  extend Memoist
   include Callapi::Call::Request::Http::LogHelper
 
   HTTP_METHOD_TO_REQUEST_CLASS = {
@@ -44,18 +43,13 @@ class Callapi::Call::Request::Http < Callapi::Call::Request::Base
   end
 
   def uri
-    Addressable::URI.parse(host).tap do |uri|
-      uri.path = api_path_prefix + request_path
+    @uri ||= Addressable::URI.parse(host).tap do |uri|
+      uri.path = request_path
       uri.query_hash = params unless put_params_in_request_body?
     end
   end
-  memoize :uri
 
   def put_params_in_request_body?
     [:post, :patch, :put].include? request_method
-  end
-
-  def api_path_prefix
-    ''
   end
 end
