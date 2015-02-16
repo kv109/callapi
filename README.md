@@ -53,7 +53,10 @@ get_notes_call.response.data    #=> [{"id"=>1, "title"=>"Jogging in park"}, {"id
 get_notes_call.response.body    #=> '[{"id":1,"title":"Jogging in park"},{"id":2,"title":"Pick-up posters from post-office"}]'
 
 # Request with params:
-post_notes_call({id: 1, title: "Swimming"})
+post_notes_call(id: 1, title: "Swimming").response.data
+
+# Request with params and headers:
+post_notes_call(id: 1, title: "Swimming").add_headers('X-SECRET-TOKEN' => '783hdkfds349').response.data
 ```
 
 <br>
