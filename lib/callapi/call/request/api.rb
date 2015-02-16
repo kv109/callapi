@@ -10,7 +10,7 @@ class Callapi::Call::Request::Api < Callapi::Call::Request::Http
   end
 
   def api_path_prefix
-    Callapi::Config.api_path_prefix if Callapi::Config.api_path_prefix  # backward compatibility
+    return Callapi::Config.api_path_prefix if Callapi::Config.api_path_prefix  # backward compatibility
     URI(Callapi::Config.api_host).path
   end
 end
