@@ -3,6 +3,7 @@ require 'memoist'
 require 'forwardable'
 require 'chainy'
 require 'ostruct'
+require_relative 'ext/super_string'
 
 module Callapi
   require 'callapi/config'

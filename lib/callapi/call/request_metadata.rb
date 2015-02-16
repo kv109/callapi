@@ -1,5 +1,3 @@
-require 'active_support/core_ext/string/inflections'
-
 class Callapi::Call::RequestMetadata < Struct.new(:context)
   extend Memoist
 
@@ -28,7 +26,7 @@ class Callapi::Call::RequestMetadata < Struct.new(:context)
   end
 
   def request_path_without_replaced_param_keys
-    '/' + call_name.underscore
+    '/' + SuperString.underscore(call_name)
   end
   memoize :request_path_without_replaced_param_keys
 

@@ -14,7 +14,7 @@ class Callapi::Config
     end
 
     def default_request_strategy
-      @default_request_strategy ||= DEFAULT_REQUEST_STRATEGY.constantize
+      @default_request_strategy ||= Kernel.const_get DEFAULT_REQUEST_STRATEGY
     end
 
     def api_path_prefix
@@ -22,7 +22,7 @@ class Callapi::Config
     end
 
     def default_response_parser
-      @default_response_parser ||= DEFAULT_RESPONSE_PARSER.constantize
+      @default_response_parser ||= Kernel.const_get DEFAULT_RESPONSE_PARSER
     end
 
     def mocks_directory=(mocks_directory)

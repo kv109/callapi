@@ -38,11 +38,12 @@ class Callapi::Routes::Metadata
 
   def call_name_with_namespaces
     namespaces.push(@call_name).map do |class_name|
-      if class_name_with_param_key?(class_name)
+      class_name = if class_name_with_param_key?(class_name)
         class_name_to_class_name_with_param_key(class_name)
       else
         class_name
-      end.camelize
+      end
+      SuperString.camelize(class_name)
     end
   end
   memoize :call_name_with_namespaces

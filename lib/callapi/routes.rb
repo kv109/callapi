@@ -1,5 +1,3 @@
-require 'active_support/core_ext/string'
-
 class Callapi::Routes
   require_relative 'routes/metadata'
 
@@ -101,7 +99,7 @@ class Callapi::Routes
 
     def helper_method_name(class_metadata)
       method_name = [class_metadata.http_method, helper_method_base_name(class_metadata), 'call'].join('_')
-      method_name.underscore.gsub('/', '_')
+      SuperString.underscore(method_name).gsub('/', '_')
     end
 
     def set_call_class_options(klass, options)
@@ -123,7 +121,8 @@ class Callapi::Routes
 
     def build_http_method_namespaces
       @build_http_method_namespaces ||= http_methods.each do |http_method|
-        Callapi.const_set(http_method.to_s.camelize, Module.new)
+        camelized_http_method = SuperString.camelize(http_method.to_s)
+        Callapi.const_set(camelized_http_method, Module.new)
       end
     end
 
