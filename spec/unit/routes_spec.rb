@@ -7,7 +7,7 @@ describe Callapi::Routes do
       post 'version'
       put 'version'
       delete 'version'
-      patch 'version'
+      patch :version
 
       get 'users', strategy: Callapi::Call::Request::Mock, parser: Callapi::Call::Parser::Plain
       get 'users/:id'

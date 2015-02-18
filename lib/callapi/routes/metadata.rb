@@ -3,7 +3,7 @@ class Callapi::Routes::Metadata
 
   def initialize(http_method_namespace, *args)
     @http_method_namespace = http_method_namespace
-    @call_name, @call_options = args.shift, *args
+    @call_name, @call_options = args.shift.to_s, *args
 
     call_name_with_all_namespaces.size.times do |i|
       metadata = create_metadata(i)
