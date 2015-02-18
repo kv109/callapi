@@ -14,7 +14,7 @@ class Callapi::Errors < StandardError
           'ServerError'
       end
     end
-    "Callapi::#{error_class_name}".constantize
+    Kernel.const_get "Callapi::#{error_class_name}"
   end
 end
 
