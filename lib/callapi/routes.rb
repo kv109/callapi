@@ -1,5 +1,6 @@
 class Callapi::Routes
   require_relative 'routes/metadata'
+  require_relative 'routes/helper_method_creator'
 
   class << self
     def draw(&block)
@@ -8,6 +9,7 @@ class Callapi::Routes
       instance_eval &block
 
       create_classes
+      create_helper_methods
     end
 
     def get(*args)
@@ -50,7 +52,9 @@ class Callapi::Routes
           if namespace.constants.include?(class_name.to_sym)
             namespace.const_get(class_name)
           else
-            create_class(namespace, class_name, class_metadata)
+            create_class(namespace, class_name, class_metadata).tap do |klass|
+              created_call_classes << klass
+            end
           end
         end
       end
@@ -73,7 +77,6 @@ class Callapi::Routes
     def create_call_class(namespace, class_name, class_metadata)
       namespace.const_set(class_name, Class.new(Callapi::Call::Base)).tap do |klass|
         set_call_class_options(klass, class_metadata.class_options) if class_metadata.class_options
-        create_helper_method(klass, class_metadata)
       end
     end
 
@@ -81,25 +84,12 @@ class Callapi::Routes
       namespace.const_set(new_namespace, Class.new)
     end
 
-    def create_helper_method(klass, class_metadata)
-      Object.send(:define_method, helper_method_name(class_metadata)) do |*args|
-        klass.new(*args)
-      end
+    def create_helper_methods
+      created_call_classes.each(&method(:create_helper_method))
     end
 
-    def helper_method_base_name(class_metadata)
-      class_metadata.call_name_with_namespaces.map do |class_name|
-        class_name.scan(/(::)?((\w)+)Param/).map { |matched_groups| matched_groups[1] }.compact.each do |pattern|
-          class_name.sub!(pattern, "By#{pattern}")
-          class_name.sub!('Param', '')
-        end
-        class_name
-      end
-    end
-
-    def helper_method_name(class_metadata)
-      method_name = [class_metadata.http_method, helper_method_base_name(class_metadata), 'call'].join('_')
-      SuperString.underscore(method_name).gsub('/', '_')
+    def create_helper_method(klass)
+      Callapi::Routes::HelperMethodCreator.new(klass).create
     end
 
     def set_call_class_options(klass, options)
@@ -146,6 +136,10 @@ class Callapi::Routes
 
     def call_classes_names
       @call_classes_names ||= call_classes_metadata.map(&:class_name).uniq
+    end
+
+    def created_call_classes
+      @created_call_classes ||= []
     end
   end
 end
