@@ -1,6 +1,8 @@
 ## 0.8.4 (next release)
 
 - Remove activesupport dependency
+- URI pattern can be a `Symbol` (before only `String`s were accepted)
+- Bugfix: #1
 - Backward compatibility fix for `#api_path_prefix`
 - Changelog added
 
