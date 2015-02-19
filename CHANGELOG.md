@@ -1,4 +1,4 @@
-## 0.8.4 (next release)
+## 0.9
 
 - Remove activesupport dependency
 - URI pattern can be a `Symbol` (before only `String`s were accepted)
