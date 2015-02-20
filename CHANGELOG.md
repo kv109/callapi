@@ -1,3 +1,7 @@
+## 0.9.1 (NEXT RELEASE)
+
+- Remove Memoist dependency
+
 ## 0.9
 
 - Remove activesupport dependency
