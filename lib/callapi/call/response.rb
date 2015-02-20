@@ -4,7 +4,6 @@ class Callapi::Call::Parser
   require_relative 'response/json'
   require_relative 'response/json/as_object'
 
-  extend Memoist
   extend Forwardable
 
   def_delegators :@response, :body, :code
@@ -14,17 +13,17 @@ class Callapi::Call::Parser
   end
 
   def data
+    return @data if @data
+
     raise_error unless ok?
     return nil if no_content?
 
-    parse
+    @data = parse
   end
-  memoize :data
 
   def status
     code.to_i
   end
-  memoize :status
 
   private
 
@@ -35,13 +34,11 @@ class Callapi::Call::Parser
   def ok?
     status < 300
   end
-  memoize :ok?
 
   def no_content?
     return true if body.nil?
     body.strip.empty?
   end
-  memoize :no_content?
 
   def raise_error
     error_class = Callapi::Errors.error_by_status(status)

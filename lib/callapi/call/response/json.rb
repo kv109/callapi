@@ -10,7 +10,6 @@ class Callapi::Call::Parser::Json < Callapi::Call::Parser
   def to_hash
     @to_hash ||= MultiJson.load(body)
   end
-  #TODO: remove Memoist
 
   def error_message
     to_hash['error_message'] rescue super

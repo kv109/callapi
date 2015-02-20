@@ -1,5 +1,4 @@
 class Callapi::Call::Request::Mock < Callapi::Call::Request::Base
-  extend Memoist
   #TODO: should not be hardcoded
   MOCK_FORMAT = '.json'
 

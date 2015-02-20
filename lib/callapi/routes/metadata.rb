@@ -1,6 +1,4 @@
 class Callapi::Routes::Metadata
-  extend Memoist
-
   def initialize(http_method_namespace, *args)
     @http_method_namespace = http_method_namespace
     @call_name, @call_options = args.shift.to_s, *args
@@ -37,7 +35,7 @@ class Callapi::Routes::Metadata
   end
 
   def call_name_with_namespaces
-    namespaces.push(@call_name).map do |class_name|
+    @call_name_with_namespaces ||= namespaces.push(@call_name).map do |class_name|
       class_name = if class_name_with_param_key?(class_name)
         class_name_to_class_name_with_param_key(class_name)
       else
@@ -46,17 +44,15 @@ class Callapi::Routes::Metadata
       SuperString.camelize(class_name)
     end
   end
-  memoize :call_name_with_namespaces
 
   def call_name_with_all_namespaces
-    [@http_method_namespace.to_s] + call_name_with_namespaces
+    @call_name_with_all_namespaces ||=
+      [@http_method_namespace.to_s] + call_name_with_namespaces
   end
-  memoize :call_name_with_all_namespaces
 
   def namespaces
-    Callapi::Routes.send(:namespaces).dup
+    @namespaces ||= Callapi::Routes.send(:namespaces).dup
   end
-  memoize :namespaces
 
   def class_name_with_param_key?(class_name)
     class_name[0] == ':' || class_name.match('/:')
