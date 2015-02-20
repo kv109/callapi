@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class DeepStruct < OpenStruct
   def initialize(hash = nil)
     @table = {}
