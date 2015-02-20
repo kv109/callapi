@@ -5,8 +5,8 @@ describe Callapi::Routes do
     described_class.draw do
       get 'version'
       post 'version'
-      put 'version'
-      delete 'version'
+      put :version
+      delete :version
       patch :version
 
       get 'users', strategy: Callapi::Call::Request::Mock, parser: Callapi::Call::Parser::Plain
@@ -18,6 +18,9 @@ describe Callapi::Routes do
           get 'index'
         end
       end
+
+      get 'orders/:id'
+      get 'orders'
     end
   end
 
@@ -118,6 +121,28 @@ describe Callapi::Routes do
   context '#get "users/:id/posts/:post_id/details"' do
     it 'should create Callapi::Get::Users::Posts::PostIdParam::Details class' do
       expect( Callapi::Get::Users::IdParam::Posts::PostIdParam::Details.superclass ).to eql(Callapi::Call::Base)
+    end
+  end
+
+  context '#get("orders/:id") and get("orders") in this direct order' do
+    context '#get "orders/:id"' do
+      it 'should create Callapi::Get::Orders::IdParam class' do
+        expect( Callapi::Get::Orders::IdParam.superclass ).to eql(Callapi::Call::Base)
+      end
+
+      it 'should create #get_orders_by_id method' do
+        expect( get_orders_by_id_call ).to be_instance_of(Callapi::Get::Orders::IdParam)
+      end
+    end
+
+    context '#get "orders"' do
+      it 'should create Callapi::Get::Orders class' do
+        expect( Callapi::Get::Orders.superclass ).to eql(Callapi::Call::Base)
+      end
+
+      it 'should create #get_orders method' do
+        expect( get_orders_call ).to be_instance_of(Callapi::Get::Orders)
+      end
     end
   end
 end
