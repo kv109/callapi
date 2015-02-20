@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'multi_json'
-gem 'memoist'
 gem 'addressable'
 gem 'addressabler', '>= 0.1'
 gem 'colorize'

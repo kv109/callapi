@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'multi_json', '~> 1.10'
   spec.add_runtime_dependency 'colorize', '~> 0.7'
   spec.add_runtime_dependency 'chainy', '~> 0.0.5'
-  spec.add_runtime_dependency 'memoist', '~> 0.11'
 
   spec.required_ruby_version = '>= 2.0'
 end
