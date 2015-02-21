@@ -1,6 +1,7 @@
 ### 0.9.1 (NEXT RELEASE)
 
 - Remove Memoist dependency
+- Instead of `call.response.data` `call.data` can be used
 
 ### 0.9
 
