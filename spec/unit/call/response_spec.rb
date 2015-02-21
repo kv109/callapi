@@ -15,17 +15,17 @@ describe Callapi::Call::Parser do
 
     it 'should not parse response twice unless call is reloaded' do
       cached_response = {'json' => true}
-      expect(@call.response.data).to eql cached_response
+      expect(@call.data).to eql cached_response
       @call.response_parser = Callapi::Call::Parser::Plain
-      expect(@call.response.data).to eql cached_response
+      expect(@call.data).to eql cached_response
       @call.reload
-      expect(@call.response.data).to eql '{"json": true}'
+      expect(@call.data).to eql '{"json": true}'
     end
 
   end
 
   context '#data' do
-    subject { @call.response.data }
+    subject { @call.data }
 
     context 'when API returned 5xx' do
       before do
@@ -56,6 +56,5 @@ describe Callapi::Call::Parser do
         expect{ subject }.to raise_error { Callapi::NotAuthorizedError }
       end
     end
-
   end
 end

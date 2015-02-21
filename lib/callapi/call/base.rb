@@ -7,6 +7,7 @@ class Callapi::Call::Base
   extend Forwardable
 
   def_delegators :request_metadata, :request_method, :request_path
+  def_delegators :response, :data, :body
 
   chain_attr_accessor :params, :headers, hash: true, prefix: 'add'
   chain_attr_accessor :response_parser, :strategy
