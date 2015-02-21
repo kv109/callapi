@@ -46,17 +46,18 @@ end
 <br>
 ##### 3 Use your calls: #data and #body methods
 ```ruby
-# Parsed response (default parser is Callapi::Call::Parser::Json, see Parsers section):
-get_notes_call.response.data    #=> [{"id"=>1, "title"=>"Jogging in park"}, {"id"=>2, "title"=>"Pick-up posters from post-office"}]
+get_notes_call.data.each do |note|
+  puts note['title']
+end
 
 # Raw response:
-get_notes_call.response.body    #=> '[{"id":1,"title":"Jogging in park"},{"id":2,"title":"Pick-up posters from post-office"}]'
+get_notes_call.body    #=> '[{"id":1,"title":"Jogging in park"},{"id":2,"title":"Pick-up posters from post-office"}]'
 
 # Request with params:
-post_notes_call(id: 1, title: "Swimming").response.data
+post_notes_call(id: 1, title: "Swimming").data
 
 # Request with params and headers:
-post_notes_call(id: 1, title: "Swimming").add_headers('X-SECRET-TOKEN' => '783hdkfds349').response.data
+post_notes_call(id: 1, title: "Swimming").add_headers('X-SECRET-TOKEN' => '783hdkfds349').data
 ```
 
 <br>
@@ -128,19 +129,19 @@ __`Callapi::Call::Parser::Json`__ converts JSON to `Hash`. If the API response f
 
 then with `#data` method we can convert this response to `Hash`:
 ```ruby
-get_notes_by_id_call(id: 12).response.data['id']  #=> 2
+get_notes_by_id_call(id: 12).data['id']  #=> 2
 ```
 
 <br>
 __`Callapi::Call::Parser::Json::AsObject`__ converts JSON to an object called `DeepStruct` (very similar to [`OpenStruct`](http://www.ruby-doc.org/stdlib-2.0/libdoc/ostruct/rdoc/OpenStruct.html)):
 ```ruby
-get_notes_by_id_call(id: 12).response.data.title  #=> "Pick-up posters from post-office"
+get_notes_by_id_call(id: 12).data.title  #=> "Pick-up posters from post-office"
 ```
 
 <br>
 __`Callapi::Call::Parser::Plain`__ does not parse at all:
 ```ruby
-get_notes_by_id_call(id: 12).response.data  #=> '{ "id": 2, "title": "Pick-up posters from post-office" }'
+get_notes_by_id_call(id: 12).data  #=> '{ "id": 2, "title": "Pick-up posters from post-office" }'
 ```
 
 <br>
@@ -162,13 +163,13 @@ end
 
 Parser can be also set for each call instance separately:
 ```ruby
-get_notes_call.with_response_parser(Callapi::Call::Parser::Json::AsObject).response.data    #=> [#<DeepStruct id=1, title="Jogging in park">]
-get_notes_call.with_response_parser(Callapi::Call::Parser::Plain).response.data             #=> "[{\n  \"id\": 1, \"title\": \"Jogging in park\"\n}]"
+get_notes_call.with_response_parser(Callapi::Call::Parser::Json::AsObject).data    #=> [#<DeepStruct id=1, title="Jogging in park">]
+get_notes_call.with_response_parser(Callapi::Call::Parser::Plain).data             #=> "[{\n  \"id\": 1, \"title\": \"Jogging in park\"\n}]"
 
 call = get_notes_call
-call.with_response_parser(Callapi::Call::Parser::Json::AsObject).response.data  #=> [#<DeepStruct id=1, title="Jogging in park">]
+call.with_response_parser(Callapi::Call::Parser::Json::AsObject).data  #=> [#<DeepStruct id=1, title="Jogging in park">]
 call.reload # DO NOT FORGET TO CLEAR CACHE!
-call.with_response_parser(Callapi::Call::Parser::Plain).response.data           #=> "[{\n  \"id\": 1, \"title\": \"Jogging in park\"\n}]"
+call.with_response_parser(Callapi::Call::Parser::Plain).data           #=> "[{\n  \"id\": 1, \"title\": \"Jogging in park\"\n}]"
 ```
  
 <br>
