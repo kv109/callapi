@@ -54,9 +54,12 @@ module Callapi::Call::Request::Http::LogHelper
     response.tap do |response|
       "RESPONSE: [#{response.code}]\n".tap do |string|
         string << (response.body.nil? ? '[EMPTY BODY]' : response.body)
+        string = string.force_encoding('utf-8')
         puts string.colorize(:light_blue)
       end
     end
+  rescue StandardError => e
+    puts 'Unable to parse response'.center(80, '-').colorize(:red).on_yellow
   end
 
   def add_response_summary_log(start_time)
