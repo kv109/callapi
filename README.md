@@ -19,12 +19,12 @@ Or install it yourself as:
 
     $ gem install callapi
 
-<br>
 ## Usage
 
 ### Basics
 
 ##### 1 Configuration: Set your API host
+
 ```ruby
 require 'callapi'
 
@@ -32,9 +32,9 @@ Callapi::Config.configure do |config|
   config.api_host = 'http://your.api.org/v2'
 end
 ```
-  
-<br>
+
 ##### 2 Routes: set your calls
+
 ```ruby
 Callapi::Routes.draw do
   get 'notes'       # This creates #get_notes_call method
@@ -43,8 +43,8 @@ Callapi::Routes.draw do
 end
 ```
 
-<br>
 ##### 3 Use your calls: #data and #body methods
+
 ```ruby
 get_notes_call.data.each do |note|
   puts note['title']
@@ -60,10 +60,10 @@ post_notes_call(id: 1, title: "Swimming").data
 post_notes_call(id: 1, title: "Swimming").add_headers('X-SECRET-TOKEN' => '783hdkfds349').data
 ```
 
-<br>
 ### Routes
 
 ##### HTTP methods
+
 ```ruby
 Callapi::Routes.draw do
   get 'results'     #=> #get_results_call
@@ -74,8 +74,8 @@ Callapi::Routes.draw do
 end
 ```
 
-<br>
 ##### Params
+
 ```ruby
 Callapi::Routes.draw do
   get 'users/:id'                 #=> #get_users_by_id_call(id: 109) | :id is required
@@ -84,8 +84,8 @@ Callapi::Routes.draw do
 end
 ```
 
-<br>
 ##### Namespaces
+
 ```ruby
 Callapi::Routes.draw do
   get 'users'               #=> #get_users_call
@@ -101,18 +101,18 @@ Callapi::Routes.draw do
 end
 ```
 
-<br>
 ##### Options
+
 ```ruby
 Callapi::Routes.draw do
   get 'users', parser: Callapi::Call::Parser::Json
 end
 ```
 
-<br>
 ## Parsers
 
 ##### Available parsers
+
 Callapi provides following parsers:
 - `Callapi::Call::Parser::Json`
 - `Callapi::Call::Parser::Json::AsObject`
@@ -120,8 +120,7 @@ Callapi provides following parsers:
 
 Default is `Callapi::Call::Parser::Json`. 
 
-<br>
-__`Callapi::Call::Parser::Json`__ converts JSON to `Hash`. If the API response for `/notes/12` is 
+`Callapi::Call::Parser::Json` - converts JSON to `Hash`. If the API response for `/notes/12` is 
 
 ```javascript
 { "id": 2, "title": "Pick-up posters from post-office" }
@@ -132,20 +131,18 @@ then with `#data` method we can convert this response to `Hash`:
 get_notes_by_id_call(id: 12).data['id']  #=> 2
 ```
 
-<br>
-__`Callapi::Call::Parser::Json::AsObject`__ converts JSON to an object called `DeepStruct` (very similar to [`OpenStruct`](http://www.ruby-doc.org/stdlib-2.0/libdoc/ostruct/rdoc/OpenStruct.html)):
+`Callapi::Call::Parser::Json::AsObject` - converts JSON to an object called `DeepStruct` (very similar to [`OpenStruct`](http://www.ruby-doc.org/stdlib-2.0/libdoc/ostruct/rdoc/OpenStruct.html)):
 ```ruby
 get_notes_by_id_call(id: 12).data.title  #=> "Pick-up posters from post-office"
 ```
 
-<br>
-__`Callapi::Call::Parser::Plain`__ does not parse at all:
+`Callapi::Call::Parser::Plain` - does not parse at all:
 ```ruby
 get_notes_by_id_call(id: 12).data  #=> '{ "id": 2, "title": "Pick-up posters from post-office" }'
 ```
 
-<br>
 ##### Setting parsers
+
 Default parser for all calls can be set in configuration:
 ```ruby
 Callapi::Config.configure do |config|
@@ -171,8 +168,7 @@ call.with_response_parser(Callapi::Call::Parser::Json::AsObject).data  #=> [#<De
 call.reload # DO NOT FORGET TO CLEAR CACHE!
 call.with_response_parser(Callapi::Call::Parser::Plain).data           #=> "[{\n  \"id\": 1, \"title\": \"Jogging in park\"\n}]"
 ```
- 
-<br>
+
 ## Configuration
 
 ##### Config options
@@ -193,12 +189,10 @@ Callapi::Config.configure do |config|
 end
 ```
 
-<br>
 ## TO DO
 
 - Support HTTPS
 
-<br>
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/callapi/fork )
